@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
-import { Message } from 'element-ui'
-import { Dev, Pro } from '../config'
+import { ElMessage } from 'element-plus'
+import { Dev, Pro } from 'config'
 
 // 判断开发环境
 const development = process.env.NODE_ENV === 'development'
@@ -32,10 +32,10 @@ http.interceptors.response.use(
   },
   (error) => {
     if (error.message.includes('timeout')) {
-      Message.error('请求超时，稍后再试')
+      ElMessage.error('请求超时，稍后再试')
       return Promise.reject(error)
     }
-    Message.error('网络连接失败')
+    ElMessage.error('网络连接失败')
     return Promise.reject(error)
   }
 )
@@ -104,4 +104,11 @@ export function request(
       return Promise.reject(err)
     })
 }
+function simplify(type) {
+  return function (url, params, config, options) {
+    return request(url, type, params, config, options)
+  }
+}
+request.get = simplify('get')
+request.post = simplify('post')
 export default request
