@@ -6,8 +6,7 @@ utils = utils.keys().reduce((total, utilPath) => {
   }
   return total
 }, {})
-export * from './http'
-export default {
+module.exports = {
   install(app) {
     app.prototype.$utils = utils
     // console.log(app.prototype)
